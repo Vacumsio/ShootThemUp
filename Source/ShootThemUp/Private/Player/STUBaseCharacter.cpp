@@ -111,9 +111,7 @@ void ASTUBaseCharacter::OnDeath()
     UE_LOG(BaseCharacterLog, Display, TEXT("Player %s is dead"), *GetName());
 
     PlayAnimMontage(DeathAnimMontage);
-
     GetCharacterMovement()->DisableMovement();
-
     SetLifeSpan(5.0f);
 
     if (Controller)
@@ -124,6 +122,5 @@ void ASTUBaseCharacter::OnDeath()
 
 void ASTUBaseCharacter::OnHealthChanged(float Health)
 {
-
     HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
