@@ -25,7 +25,7 @@ public:
     FColor SphereColor = FColor::Red;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float Damage = 10.0f;
+    float Damage = 5.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     bool DoFullDamage = false;

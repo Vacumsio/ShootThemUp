@@ -32,8 +32,8 @@ void USTUHealthComponent::OnTakeAnyDamage(
         return;
 
     SetHealth(Health - Damage);
-    Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
-    OnHealthChanged.Broadcast(Health);
+    //Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+    //OnHealthChanged.Broadcast(Health);
 
     if (IsDead())
     {
