@@ -1,11 +1,11 @@
 // Shoot Them Up Game. All rights reserved.
 
 #include "Weapon/STUBaseWeapon.h"
-#include <Components/SkeletalMeshComponent.h>
-#include <Engine/World.h>
-#include <DrawDebugHelpers.h>
-#include <GameFramework/Character.h>
-#include <GameFramework/Controller.h>
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/Controller.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All);
 
@@ -23,34 +23,11 @@ void ASTUBaseWeapon::BeginPlay()
     check(WeaponMesh);
 }
 
-void ASTUBaseWeapon::Fire()
-{
-    MakeShot();
-}
+void ASTUBaseWeapon::StartFire() {}
 
-void ASTUBaseWeapon::MakeShot()
-{
-    if (!GetWorld())
-        return;
+void ASTUBaseWeapon::StopFire() {}
 
-    FVector TraceStart, TraceEnd;
-    if (!GetTraceData(TraceStart, TraceEnd))
-        return;
-
-    FHitResult HitResult;
-    MakeHit(HitResult, TraceStart, TraceEnd);
-
-    if (HitResult.bBlockingHit)
-    {
-        MakeDamage(HitResult);
-        DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Blue, false, 3.0f, 0, 3.0f);
-        DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 5.0f);
-    }
-    else
-    {
-        DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Blue, false, 3.0f, 0, 3.0f);
-    }
-}
+void ASTUBaseWeapon::MakeShot() {}
 
 APlayerController* ASTUBaseWeapon::GetPlayerController() const
 {
