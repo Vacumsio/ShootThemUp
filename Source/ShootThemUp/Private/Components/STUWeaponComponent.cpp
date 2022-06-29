@@ -21,6 +21,8 @@ void USTUWeaponComponent::SpawnWeapon()
     if (!GetWorld())
         return;
 
+    // ACharacter* Character = GetOwner<ACharacter>();
+
     ACharacter* Character = Cast<ACharacter>(GetOwner());
     if (!Character)
         return;
