@@ -3,9 +3,7 @@
 #include "Weapon/STUBaseWeapon.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
-#include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/Controller.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All);
 
@@ -21,6 +19,8 @@ void ASTUBaseWeapon::BeginPlay()
 {
     Super::BeginPlay();
     check(WeaponMesh);
+    checkf(DefaultAmmo.Bullets > 0, TEXT("Bullets count couldn't be less or equal zero"));
+    checkf(DefaultAmmo.Clips > 0, TEXT("Clips count couldn't be less or equal zero"));
     CurrentAmmo = DefaultAmmo;
 }
 
