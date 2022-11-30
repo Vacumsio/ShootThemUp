@@ -3,9 +3,7 @@
 #include "Weapon/STUBaseWeapon.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
-#include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/Controller.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All);
 
@@ -21,6 +19,9 @@ void ASTUBaseWeapon::BeginPlay()
 {
     Super::BeginPlay();
     check(WeaponMesh);
+    checkf(DefaultAmmo.Bullets > 0, TEXT("Bullets count couldn't be less or equal zero"));
+    checkf(DefaultAmmo.Clips > 0, TEXT("Clips count couldn't be less or equal zero"));
+    CurrentAmmo = DefaultAmmo;
 }
 
 void ASTUBaseWeapon::StartFire() {}
@@ -77,11 +78,59 @@ void ASTUBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, c
     GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
 }
 
-void ASTUBaseWeapon::MakeDamage(const FHitResult& HitResult)
+void ASTUBaseWeapon::DecreaseAmmo()
 {
-    const auto DamageActor = HitResult.GetActor();
-    if (!DamageActor)
+    if (CurrentAmmo.Bullets==0)
+    {
+        UE_LOG(LogBaseWeapon, Warning, TEXT("Clip is empty"));
         return;
+    }
+    
+    CurrentAmmo.Bullets--;
+    LogAmmo();
 
-    DamageActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+    if (IsClipEmpty() && !IsAmmoEmpty())
+    {
+        StopFire();
+        FOnClipEmpty.Broadcast();
+    }
 }
+
+bool ASTUBaseWeapon::IsAmmoEmpty() const
+{
+    return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty();
+}
+
+bool ASTUBaseWeapon::IsClipEmpty() const
+{
+    return CurrentAmmo.Bullets == 0;
+}
+
+void ASTUBaseWeapon::ChangeClip()
+{
+    if (!CurrentAmmo.Infinite)
+    {
+        if (CurrentAmmo.Clips==0)
+        {
+            UE_LOG(LogBaseWeapon, Warning, TEXT("No more clips"));
+            return;
+        }
+        CurrentAmmo.Clips--;
+    }
+    CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+
+    UE_LOG(LogBaseWeapon, Display, TEXT("----- Change Clip -----"));
+}
+
+bool ASTUBaseWeapon::CanReload() const
+{
+    return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0;
+}
+
+void ASTUBaseWeapon::LogAmmo()
+{
+    FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.Bullets) + " / ";
+    AmmoInfo += CurrentAmmo.Infinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
+    UE_LOG(LogBaseWeapon, Display, TEXT("%s"), *AmmoInfo);
+}
+    
