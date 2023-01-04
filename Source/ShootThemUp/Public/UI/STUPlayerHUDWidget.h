@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "STUCoreTypes.h"
-#include "STUWeaponComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "STUPlayerHUDWidget.generated.h"
 
@@ -23,6 +22,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="UI")
     bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
 
-private:
-    USTUWeaponComponent* GetWeaponComponent() const;
+    UFUNCTION(BlueprintCallable, Category="UI")
+    bool IsPlayerAlive() const;
+
+    UFUNCTION(BlueprintCallable, Category="UI")
+    bool IsPlayerSpectating() const;
 };

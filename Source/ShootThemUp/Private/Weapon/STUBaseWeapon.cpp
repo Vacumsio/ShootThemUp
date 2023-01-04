@@ -84,10 +84,8 @@ void ASTUBaseWeapon::DecreaseAmmo()
     {
         UE_LOG(LogBaseWeapon, Warning, TEXT("Clip is empty"));
         return;
-    }
-    
+    }    
     CurrentAmmo.Bullets--;
-    LogAmmo();
 
     if (IsClipEmpty() && !IsAmmoEmpty())
     {
