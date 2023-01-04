@@ -19,7 +19,10 @@ public:
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="UI")
-    TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
+    TSubclassOf<UUserWidget> PlaerHUDWidgetClass;
 
     virtual void BeginPlay() override;
+    
+private:
+    void DrawCrosshair();
 };
